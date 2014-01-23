@@ -1,10 +1,9 @@
 package de.knutwalker.esclient.impl
 
-import scala.concurrent.{Promise, Future}
+import scala.concurrent.{ Promise, Future }
 
 import org.elasticsearch.client.Client
-import org.elasticsearch.action.{ActionResponse, ActionRequest, ActionListener}
-
+import org.elasticsearch.action.{ ActionResponse, ActionRequest, ActionListener }
 
 trait ActionMagnet[Request, Response] {
   def execute(javaClient: Client, request: Request): Future[Response]
@@ -85,7 +84,7 @@ object ActionMagnet {
   implicit val termVectorAction = magnet(_.termVector)
   implicit val updateAction = magnet(_.update)
 
-  private def magnet[Request <: ActionRequest[Request], Response <: ActionResponse](action: Client => (Request, ActionListener[Response]) => Unit) =
+  private def magnet[Request <: ActionRequest[Request], Response <: ActionResponse](action: Client ⇒ (Request, ActionListener[Response]) ⇒ Unit) =
     new ActionMagnet[Request, Response] {
       override def execute(javaClient: Client, request: Request): Future[Response] = {
         val promise = Promise[Response]()

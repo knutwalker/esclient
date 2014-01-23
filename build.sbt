@@ -1,5 +1,7 @@
 name := """esclient"""
 
+// version is set by sbt-release
+
 organization := "de.knutwalker"
 
 organizationName := "knutwalker"

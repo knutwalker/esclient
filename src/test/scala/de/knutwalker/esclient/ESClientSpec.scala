@@ -4,14 +4,14 @@ import scala.concurrent._
 
 import org.elasticsearch.node.NodeBuilder.nodeBuilder
 import org.elasticsearch.index.query.QueryBuilders._
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, Matchers, FlatSpec}
+import org.scalatest.{ BeforeAndAfter, BeforeAndAfterAll, Matchers, FlatSpec }
 import org.elasticsearch.node.Node
 import org.elasticsearch.client.Client
-import org.elasticsearch.action.{ActionResponse, ActionRequest, ActionRequestBuilder}
+import org.elasticsearch.action.{ ActionResponse, ActionRequest, ActionRequestBuilder }
 import org.elasticsearch.action.search.SearchResponse
 import de.knutwalker.esclient.impl.ActionMagnet
 
-
+// format: +preserveSpaceBeforeArguments
 class ESClientSpec extends FlatSpec with Matchers with BeforeAndAfterAll with BeforeAndAfter {
   import de.knutwalker.esclient._
 
@@ -53,12 +53,10 @@ class ESClientSpec extends FlatSpec with Matchers with BeforeAndAfterAll with Be
       .setQuery(matchAllQuery())
       .addFields("foo", "bar")
 
-
     val res = execute(req)
     val hit = res.getHits.getHits.head
 
-
-    res shouldBe a [SearchResponse]
+    res shouldBe a[SearchResponse]
     res.getHits.getMaxScore shouldBe 1.0F +- 0.001F
     res.getHits.getTotalHits shouldBe 1
 

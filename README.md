@@ -19,10 +19,15 @@ implicit class ESClient(client : Client) extends AnyVal {
 
     resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
 
-    libraryDependencies += "de.knutwalker" %% "esclient" % "1.0.0.RC1-SNAPSHOT"
+    libraryDependencies ++= Seq(
+      "org.elasticsearch" % "elasticsearch" % "1.0.0.RC1",
+      "de.knutwalker" %% "esclient" % "1.0.0.RC1-SNAPSHOT"
+    )
 
 Note that the esclient versioning is aligned with the elastic search version.
 This is release based on Elasticsearch version 1.0.0.RC1
+Elasticsearch is only defined as `provided`, which means you have to pull the correct
+version in yourself.
 
 ### Sample
 

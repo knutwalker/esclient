@@ -2,7 +2,7 @@ package de.knutwalker
 
 import scala.concurrent.Future
 import org.elasticsearch.client.Client
-import org.elasticsearch.action.{ActionRequest, ActionResponse}
+import org.elasticsearch.action.{ ActionRequest, ActionResponse }
 import de.knutwalker.esclient.impl.ActionMagnet
 
 package object esclient {

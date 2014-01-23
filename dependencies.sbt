@@ -5,7 +5,7 @@ libraryDependencies ++= {
     val Scalacheck = "1.10.1"
   }
   Seq(
-    "org.elasticsearch"  % "elasticsearch" % Version.ElasticSearch,
+    "org.elasticsearch"  % "elasticsearch" % Version.ElasticSearch   % "provided",
     "org.scalatest"     %% "scalatest"     % Version.Scalatest       % "test",
     "org.scalacheck"    %% "scalacheck"    % Version.Scalacheck      % "test"
   )
