@@ -1,4 +1,4 @@
-package de.knutwalker.esclient.impl
+package de.knutwalker.esclient
 
 import scala.concurrent.{Promise, Future}
 
@@ -6,7 +6,7 @@ import org.elasticsearch.client.Client
 import org.elasticsearch.action.{ActionResponse, ActionRequest, ActionListener}
 
 
-trait ActionMagnet[Request, Response] {
+sealed trait ActionMagnet[Request, Response] {
   def execute(javaClient: Client, request: Request): Future[Response]
 }
 
@@ -43,7 +43,6 @@ object ActionMagnet {
   implicit val indicesExistsAction = magnet(_.admin.indices.exists)
   implicit val typesExistsAction = magnet(_.admin.indices.typesExists)
   implicit val flushAction = magnet(_.admin.indices.flush)
-  @deprecated implicit val gatewaySnapshotAction = magnet(_.admin.indices.gatewaySnapshot)
   implicit val deleteMappingAction = magnet(_.admin.indices.deleteMapping)
   implicit val getFieldMappingsAction = magnet(_.admin.indices.getFieldMappings)
   implicit val getMappingsAction = magnet(_.admin.indices.getMappings)
@@ -55,6 +54,7 @@ object ActionMagnet {
   implicit val getSettingsAction = magnet(_.admin.indices.getSettings)
   implicit val updateSettingsAction = magnet(_.admin.indices.updateSettings)
   implicit val indicesStatsAction = magnet(_.admin.indices.stats)
+  @deprecated("Use the recovery API instead. See JavaDoc for more", "1.0.0")
   implicit val indicesStatusAction = magnet(_.admin.indices.status)
   implicit val deleteIndexTemplateAction = magnet(_.admin.indices.deleteTemplate)
   implicit val getIndexTemplatesAction = magnet(_.admin.indices.getTemplates)
@@ -63,10 +63,8 @@ object ActionMagnet {
   implicit val deleteWarmerAction = magnet(_.admin.indices.deleteWarmer)
   implicit val getWarmersAction = magnet(_.admin.indices.getWarmers)
   implicit val putWarmerAction = magnet(_.admin.indices.putWarmer)
-
   implicit val bulkAction = magnet(_.bulk)
-  // see https://github.com/elasticsearch/elasticsearch/pull/4851
-  // implicit val clearScrollAction = magnet(_.clearScroll)
+  implicit val clearScrollAction = magnet(_.clearScroll)
   implicit val countAction = magnet(_.count)
   implicit val deleteAction = magnet(_.delete)
   implicit val deleteByQueryAction = magnet(_.deleteByQuery)
@@ -85,18 +83,17 @@ object ActionMagnet {
   implicit val termVectorAction = magnet(_.termVector)
   implicit val updateAction = magnet(_.update)
 
-  private def magnet[Request <: ActionRequest[Request], Response <: ActionResponse](action: Client => (Request, ActionListener[Response]) => Unit) =
-    new ActionMagnet[Request, Response] {
-      override def execute(javaClient: Client, request: Request): Future[Response] = {
-        val promise = Promise[Response]()
-        action(javaClient)(request, actionListener(promise))
+  private[this] def magnet[Req <: ActionRequest[Req], Resp <: ActionResponse](action: Client => (Req, ActionListener[Resp]) => Unit) =
+    new ActionMagnet[Req, Resp] {
+      def execute(javaClient: Client, request: Req): Future[Resp] = {
+        val promise = Promise[Resp]()
+        action(javaClient)(request, new ActionFuture[Resp](promise))
         promise.future
       }
     }
 
-  private[esclient] def actionListener[A](promise: Promise[A]) = new ActionListener[A] {
-
-    override def onFailure(e: Throwable): Unit = promise.failure(e)
-    override def onResponse(response: A): Unit = promise.success(response)
+  private[this] final class ActionFuture[A](promise: Promise[A]) extends ActionListener[A] {
+    def onFailure(e: Throwable): Unit = promise.failure(e)
+    def onResponse(response: A): Unit = promise.trySuccess(response)
   }
 }

@@ -3,12 +3,11 @@ package de.knutwalker
 import scala.concurrent.Future
 import org.elasticsearch.client.Client
 import org.elasticsearch.action.{ActionRequest, ActionResponse}
-import de.knutwalker.esclient.impl.ActionMagnet
 
 package object esclient {
 
   implicit class ESClient(val javaClient: Client) extends AnyVal {
-    def execute[Request <: ActionRequest[Request], Response <: ActionResponse](request: Request)(implicit action: ActionMagnet[Request, Response]): Future[Response] =
+    def execute[Req <: ActionRequest[Req], Resp <: ActionResponse](request: Req)(implicit action: ActionMagnet[Req, Resp]): Future[Resp] =
       action.execute(javaClient, request)
   }
 }

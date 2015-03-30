@@ -1,5 +1,7 @@
 package de.knutwalker.esclient
 
+import org.elasticsearch.common.settings.ImmutableSettings
+
 import scala.concurrent._
 
 import org.elasticsearch.node.NodeBuilder.nodeBuilder
@@ -9,16 +11,16 @@ import org.elasticsearch.node.Node
 import org.elasticsearch.client.Client
 import org.elasticsearch.action.{ActionResponse, ActionRequest, ActionRequestBuilder}
 import org.elasticsearch.action.search.SearchResponse
-import de.knutwalker.esclient.impl.ActionMagnet
+
+import java.util.UUID
 
 
 class ESClientSpec extends FlatSpec with Matchers with BeforeAndAfterAll with BeforeAndAfter {
-  import de.knutwalker.esclient._
 
   var node: Node = _
   var client: Client = _
 
-  private def execute[Request <: ActionRequest[Request], Response <: ActionResponse](rb: ActionRequestBuilder[Request, Response, _])(implicit am: ActionMagnet[Request, Response]): Response = {
+  private def execute[Request <: ActionRequest[Request], Response <: ActionResponse](rb: ActionRequestBuilder[Request, Response, _, _])(implicit am: ActionMagnet[Request, Response]): Response = {
     val r = rb.request()
     val f = client.execute(r)
 
@@ -26,7 +28,10 @@ class ESClientSpec extends FlatSpec with Matchers with BeforeAndAfterAll with Be
   }
 
   override protected def beforeAll(): Unit = {
-    node = nodeBuilder().node()
+    node = nodeBuilder()
+      .local(true)
+      .settings(ImmutableSettings.builder().put("cluster.name", UUID.randomUUID().toString))
+      .node()
     client = node.client()
   }
 
