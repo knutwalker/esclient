@@ -109,7 +109,7 @@ object ActionMagnet {
     }
 
   private[this] final class ActionFuture[A](promise: Promise[A]) extends ActionListener[A] {
-    def onFailure(e: Throwable): Unit = promise.failure(e)
+    def onFailure(e: Throwable): Unit = promise.tryFailure(e)
     def onResponse(response: A): Unit = promise.trySuccess(response)
   }
 }
