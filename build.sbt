@@ -9,6 +9,7 @@ description := """Slim Elasticsearch client for scala"""
 startYear := Some(2014)
 
 scalaVersion := "2.11.5"
+crossScalaVersions := "2.11.5" :: "2.10.5" :: Nil
 scalacOptions ++= Seq(
   "-unchecked",
   "-deprecation",
