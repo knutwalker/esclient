@@ -46,7 +46,9 @@ class ESClientSpec extends FlatSpec with Matchers with BeforeAndAfterAll with Be
   override protected def beforeAll(): Unit = {
     node = nodeBuilder()
       .local(true)
-      .settings(ImmutableSettings.builder().put("cluster.name", UUID.randomUUID().toString))
+      .settings(ImmutableSettings.builder()
+        .put("cluster.name", UUID.randomUUID().toString)
+        .put("http.enabled", false))
       .node()
     client = node.client()
   }
