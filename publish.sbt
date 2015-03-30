@@ -6,6 +6,7 @@ import sbtrelease.ReleaseStateTransformations._
 import xerial.sbt.Sonatype.SonatypeKeys._
 
 releaseSettings
+sonatypeSettings
 
 licenses += "The Apache Software Licence, Version 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")
 scmInfo := Some(ScmInfo(url("https://github.com/knutwalker/esclient"), "scm:git:https://github.com/knutwalker/esclient.git", Some("scm:git:ssh://git@github.com:knutwalker/esclient.git")))
