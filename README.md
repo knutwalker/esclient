@@ -17,6 +17,8 @@ implicit class ESClient(client : Client) extends AnyVal {
 
 ### Usage
 
+[![Maven](https://img.shields.io/maven-central/v/de.knutwalker/esclient_2.11.svg)](http://search.maven.org/#search|ga|1|g%3A%22de.knutwalker%22%20AND%20a%3A%22esclient_2.11%22)
+
     libraryDependencies += "de.knutwalker" %% "esclient" % "1.5.1"
 
 Note that the esclient versioning is aligned with the elastic search version.
