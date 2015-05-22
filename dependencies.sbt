@@ -1,12 +1,5 @@
-libraryDependencies ++= {
-  object Version {
-    val ElasticSearch = "1.5.2"
-    val Scalatest  = "2.2.4"
-    val Scalacheck = "1.12.2"
-  }
-  List(
-    "org.elasticsearch"  % "elasticsearch" % Version.ElasticSearch,
-    "org.scalatest"     %% "scalatest"     % Version.Scalatest       % "test",
-    "org.scalacheck"    %% "scalacheck"    % Version.Scalacheck      % "test"
-  )
-}
+libraryDependencies ++= List(
+  "org.elasticsearch"  % "elasticsearch" % "1.5.2",
+  "org.scalatest"     %% "scalatest"     % "2.2.4"  % "test",
+  "org.scalacheck"    %% "scalacheck"    % "1.12.2" % "test"
+)
