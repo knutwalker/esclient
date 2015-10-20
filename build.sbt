@@ -8,8 +8,8 @@ homepage := Some(url("http://knutwalker.de/esclient/"))
 description := """Slim Elasticsearch client for scala"""
 startYear := Some(2014)
 
-scalaVersion := "2.11.5"
-crossScalaVersions := "2.11.5" :: "2.10.5" :: Nil
+scalaVersion := "2.11.7"
+crossScalaVersions := "2.11.7" :: "2.10.5" :: Nil
 scalacOptions ++= Seq(
   "-unchecked",
   "-deprecation",
