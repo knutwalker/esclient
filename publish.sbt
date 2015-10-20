@@ -41,8 +41,7 @@ releaseProcess := List[ReleaseStep](
   releaseToCentral,
   setNextVersion,
   commitNextVersion,
-  pushChanges,
-  publishArtifacts
+  pushChanges
 )
 
 lazy val publishSignedArtifacts = publishArtifacts.copy(
